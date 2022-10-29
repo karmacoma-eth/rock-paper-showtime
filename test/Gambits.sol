@@ -66,23 +66,3 @@ contract Crescendo is IPlayer {
         return Throw.Rock;
     }
 }
-
-contract Mirror is IPlayer {
-    function firstThrow(string calldata)
-        external
-        pure
-        override
-        returns (Throw)
-    {
-        return Throw.Paper;
-    }
-
-    function nextThrow(Throw prevOpponentThrow)
-        external
-        pure
-        override
-        returns (Throw)
-    {
-        return prevOpponentThrow;
-    }
-}

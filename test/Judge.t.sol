@@ -5,8 +5,9 @@ import "forge-std/Test.sol";
 
 import {Judge} from "src/Judge.sol";
 
-import {Avalanche, Bureaucrat, Crescendo, PaperDolls, Mirror} from "test/Gambits.sol";
+import {Avalanche, Bureaucrat, Crescendo, PaperDolls} from "test/Gambits.sol";
 import {GasGuzzler, Reverty} from "test/BadPlayers.sol";
+import {Mirror, Cheater} from "test/MiscPlayers.sol";
 
 contract JudgeTest is Test {
     event PlayerAdded(string name, address code);
@@ -27,6 +28,7 @@ contract JudgeTest is Test {
         judge.register("Reverty", address(new Reverty()));
         judge.register("GasGuzzler", address(new GasGuzzler()));
         judge.register("Mirror", address(new Mirror()));
+        judge.register("Cheater", address(new Cheater(address(judge))));
     }
 
     function testDraw() public {
@@ -75,5 +77,14 @@ contract JudgeTest is Test {
         string memory winner = judge.play("Crescendo", "Mirror");
 
         assertEq(winner, "Bureaucrat");
+    }
+
+    function testCheater() public {
+        // the cheater should be able to win against any static strategy
+        assertEq(judge.play("Cheater", "Bureaucrat"), "Cheater");
+        assertEq(judge.play("Cheater", "Avalanche"), "Cheater");
+        assertEq(judge.play("Cheater", "Crescendo"), "Cheater");
+        assertEq(judge.play("Cheater", "PaperDolls"), "Cheater");
+        assertEq(judge.play("Cheater", "Mirror"), "Cheater");
     }
 }
