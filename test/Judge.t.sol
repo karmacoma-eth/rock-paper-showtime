@@ -5,7 +5,7 @@ import "forge-std/Test.sol";
 
 import {Judge} from "src/Judge.sol";
 
-import {Avalanche, Bureaucrat, Crescendo, PaperDolls} from "test/Gambits.sol";
+import {Avalanche, Bureaucrat, Crescendo, PaperDolls, Mirror} from "test/Gambits.sol";
 import {GasGuzzler, Reverty} from "test/BadPlayers.sol";
 
 contract JudgeTest is Test {
@@ -26,6 +26,7 @@ contract JudgeTest is Test {
         judge.register("PaperDolls", address(new PaperDolls()));
         judge.register("Reverty", address(new Reverty()));
         judge.register("GasGuzzler", address(new GasGuzzler()));
+        judge.register("Mirror", address(new Mirror()));
     }
 
     function testDraw() public {
@@ -68,5 +69,11 @@ contract JudgeTest is Test {
     function testGasGuzzler() public {
         vm.expectRevert();
         judge.play("Bureaucrat", "GasGuzzler");
+    }
+
+    function testMirror() public {
+        string memory winner = judge.play("Crescendo", "Mirror");
+
+        assertEq(winner, "Bureaucrat");
     }
 }

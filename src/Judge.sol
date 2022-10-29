@@ -45,8 +45,11 @@ contract Judge {
             unchecked {
                 round++;
 
-                p1Throw = p1.nextThrow{gas: GAS_STIPEND}(p2Throw);
-                p2Throw = p2.nextThrow{gas: GAS_STIPEND}(p1Throw);
+                (p1Throw, p2Throw) = (
+                    p1.nextThrow{gas: GAS_STIPEND}(p2Throw),
+                    p2.nextThrow{gas: GAS_STIPEND}(p1Throw)
+                );
+
                 emit Round(round, toString(p1Throw), toString(p2Throw));
 
                 (uint256 p1RoundScore, uint256 p2RoundScore) = _gradeRound(
