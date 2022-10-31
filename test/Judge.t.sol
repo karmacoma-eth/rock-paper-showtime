@@ -5,7 +5,7 @@ import "forge-std/Test.sol";
 
 import {Judge} from "src/Judge.sol";
 
-import {Avalanche, Bureaucrat, Crescendo, PaperDolls} from "test/Gambits.sol";
+import {Avalanche, Bureaucrat, Crescendo, PaperDolls, Denouement} from "test/Gambits.sol";
 import {GasGuzzler, Reverty} from "test/BadPlayers.sol";
 import {Mirror, Cheater} from "test/MiscPlayers.sol";
 
@@ -24,6 +24,7 @@ contract JudgeTest is Test {
         judge.register("Bureaucrat", address(new Bureaucrat()));
         judge.register("Avalanche", address(new Avalanche()));
         judge.register("Crescendo", address(new Crescendo()));
+        judge.register("Denouement", address(new Denouement()));
         judge.register("PaperDolls", address(new PaperDolls()));
         judge.register("Reverty", address(new Reverty()));
         judge.register("GasGuzzler", address(new GasGuzzler()));
@@ -73,10 +74,16 @@ contract JudgeTest is Test {
         judge.play("Bureaucrat", "GasGuzzler");
     }
 
-    function testMirror() public {
+    function testCrescendoVsMirror() public {
         string memory winner = judge.play("Crescendo", "Mirror");
+        // the previous play is weaker, so it loses against Crescendo
+        assertEq(winner, "Crescendo");
+    }
 
-        assertEq(winner, "Bureaucrat");
+    function testDenouementVsMirror() public {
+        string memory winner = judge.play("Denouement", "Mirror");
+        // the previous play is stronger, so it wins against Denouement
+        assertEq(winner, "Mirror");
     }
 
     function testCheater() public {

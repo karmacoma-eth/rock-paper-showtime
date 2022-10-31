@@ -66,3 +66,22 @@ contract Crescendo is IPlayer {
         return Throw.Rock;
     }
 }
+
+// opposite of Crescendo
+contract Denouement is IPlayer {
+    uint256 round = 1;
+
+    function firstThrow(string calldata) external override returns (Throw) {
+        round = 1;
+        return Throw.Rock;
+    }
+
+    function nextThrow(Throw) external override returns (Throw) {
+        if (round == 1) {
+            round = 2;
+            return Throw.Scissors;
+        }
+
+        return Throw.Paper;
+    }
+}
