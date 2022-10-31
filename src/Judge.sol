@@ -41,7 +41,7 @@ contract Judge {
 
         (uint256 p1Score, uint256 p2Score) = _gradeRound(p1Throw, p2Throw);
 
-        while (round <= 5) {
+        while (round < 5) {
             unchecked {
                 round++;
 
